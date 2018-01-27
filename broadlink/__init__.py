@@ -501,6 +501,11 @@ class rm(device):
     packet[0] = 3
     self.send_packet(0x6a, packet)
 
+  def cancel_sweep_frequency(self):
+    packet = bytearray(16)
+    packet[0] = 0x1e
+    self.send_packet(0x6a, packet)
+
   def sweep_frequency(self):
     packet = bytearray(16)
     packet[0] = 0x19;
@@ -510,6 +515,7 @@ class rm(device):
     packet = bytearray(16)
     packet[0] = 0x1a
     response = self.send_packet(0x6a, packet)
+    print(self.decrypt(bytes(response[0x38:])))
     err = response[0x22] | (response[0x23] << 8)
     if err == 0:
       payload = self.decrypt(bytes(response[0x38:]))
